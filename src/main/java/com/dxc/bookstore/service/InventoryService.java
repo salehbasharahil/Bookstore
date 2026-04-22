@@ -9,15 +9,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class InventoryServiceImpl implements IInventoryService {
+public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
 
-    public InventoryServiceImpl(InventoryRepository inventoryRepository) {
+    public InventoryService(InventoryRepository inventoryRepository) {
         this.inventoryRepository = inventoryRepository;
     }
 
-    @Override
     public Book addNewBook(Book book) {
         if (inventoryRepository.existsById(book.getIsbn())) {
             throw new BookAlreadyExistException();
@@ -25,7 +24,6 @@ public class InventoryServiceImpl implements IInventoryService {
         return inventoryRepository.save(book);
     }
 
-    @Override
     public Book updateBook(String isbn, Book book) {
         Book existing = inventoryRepository.findById(isbn)
                 .orElseThrow(() -> new BookNotFoundException());
@@ -39,7 +37,6 @@ public class InventoryServiceImpl implements IInventoryService {
         return inventoryRepository.save(existing);
     }
 
-    @Override
     public List<Book> search(String title, String author) {
 
         if (title != null && author != null) {
@@ -53,7 +50,6 @@ public class InventoryServiceImpl implements IInventoryService {
         }
     }
 
-    @Override
     public void deleteBook(String isbn) {
         if (!inventoryRepository.existsById(isbn)) {
             throw new BookNotFoundException();

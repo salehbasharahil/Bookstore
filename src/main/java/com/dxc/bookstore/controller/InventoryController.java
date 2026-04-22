@@ -1,7 +1,7 @@
 package com.dxc.bookstore.controller;
 
 import com.dxc.bookstore.domain.Book;
-import com.dxc.bookstore.service.InventoryServiceImpl;
+import com.dxc.bookstore.service.InventoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,9 +13,9 @@ import java.util.List;
 @RequestMapping("/v1/books")
 public class InventoryController {
 
-    private final InventoryServiceImpl inventoryService;
+    private final InventoryService inventoryService;
 
-    public InventoryController(InventoryServiceImpl inventoryService) {
+    public InventoryController(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
 
@@ -41,8 +41,8 @@ public class InventoryController {
         return ResponseEntity.ok(results);
     }
 
-    @DeleteMapping("/delete/{isbn}")
     @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{isbn}")
     public ResponseEntity<String> deleteBook(@PathVariable String isbn) {
         inventoryService.deleteBook(isbn);
         return ResponseEntity.ok("Successfully deleted");
